@@ -14,13 +14,13 @@ async fn main() {
     let conn = Connection::open("../stock-quotes.db").unwrap();
 
     while let Some(q) = stock_info.pop(){
-        let _ = conn.execute("INSERT INTO stock_quotes_landing VALUES(?1,?2,?3,?4,?5,?6,?7,?8)",(q.ticker,q.close, q.open, q.high, q.low, q.timestamp, q.volume, ""));
+        let _ = conn.execute("INSERT INTO stock_quotes_landing VALUES(?1,?2,?3,?4,?5,?6,?7)",(q.ticker,q.close, q.open, q.high, q.low, q.timestamp, q.volume));
     }
 }
 
 async fn get_quotes(provider: &yf::YahooConnector, ticker:&str) -> StockQuote{
     
-    let resp = provider.get_latest_quotes(ticker, "5m").await;
+    let resp = provider.get_latest_quotes(ticker, "1d").await;
     let attr = resp.unwrap().last_quote().unwrap();
     println!("{}", attr.close);
 
